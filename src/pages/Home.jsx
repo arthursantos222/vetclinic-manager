@@ -15,11 +15,9 @@ export default function Home() {
         const res = await axios.get(
           "https://685997d09f6ef9611153a5fd.mockapi.io/pets"
         );
-        // Pega os 5 pets mais recentes (os últimos 5 do array)
         const recentPets = res.data.slice(-5).reverse();
         setPets(recentPets);
 
-        // Para cada pet, buscar imagem do Dog CEO
         const imgs = {};
         await Promise.all(
           recentPets.map(async (pet) => {
@@ -40,28 +38,28 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen p-6 bg-green-100 flex flex-col items-center">
-      <h1 className="text-3xl font-bold mb-6 text-green-800">
+    <div className="min-h-screen p-8 bg-gradient-to-tr from-green-50 to-green-100 flex flex-col items-center">
+      <h1 className="text-4xl font-extrabold mb-8 text-green-900 drop-shadow-md">
         Bem-vindo ao VetClinic!
       </h1>
 
       {loading ? (
-        <p>Carregando pets...</p>
+        <p className="text-lg text-gray-600">Carregando pets...</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-4xl">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 w-full max-w-6xl">
           {pets.map((pet) => (
             <div
               key={pet.id}
-              className="bg-white rounded shadow p-4 flex flex-col items-center hover:shadow-lg transition"
+              className="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center transform hover:scale-105 transition"
             >
               <img
                 src={images[pet.id]}
                 alt={pet.breed}
-                className="w-40 h-40 object-cover rounded mb-4"
+                className="w-48 h-48 object-cover rounded-lg mb-5"
               />
-              <h2 className="text-xl font-semibold">{pet.name}</h2>
-              <p>Raça: {pet.breed}</p>
-              <p>Tutor: {pet.owner}</p>
+              <h2 className="text-2xl font-semibold text-green-800">{pet.name}</h2>
+              <p className="text-gray-700 mt-1">Raça: {pet.breed}</p>
+              <p className="text-gray-600 mt-1">Tutor: {pet.owner}</p>
             </div>
           ))}
         </div>
@@ -69,7 +67,7 @@ export default function Home() {
 
       <button
         onClick={() => navigate("/login")}
-        className="mt-10 bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700 transition"
+        className="mt-12 bg-green-700 text-white px-10 py-4 rounded-full font-semibold shadow-lg hover:bg-green-800 transition"
       >
         Acesso Funcionário
       </button>

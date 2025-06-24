@@ -26,12 +26,11 @@ export default function Dashboard() {
     fetchPets();
   }, []);
 
-  if (!user) {
-    return <p>Carregando usuário...</p>;
-  }
+  const uniqueBreeds = [...new Set(pets.map((pet) => pet.breed))];
 
-  const uniqueBreeds = [...new Set(pets.map(pet => pet.breed))];
-  const filteredPets = selectedBreed ? pets.filter(pet => pet.breed === selectedBreed) : pets;
+  const filteredPets = selectedBreed
+    ? pets.filter((pet) => pet.breed === selectedBreed)
+    : pets;
 
   useEffect(() => {
     async function fetchImages() {
@@ -54,29 +53,40 @@ export default function Dashboard() {
     navigate("/login");
   }
 
-  if (loading) return <p className="p-4 text-center">Carregando pets...</p>;
+  if (loading)
+    return (
+      <p className="p-4 text-center text-gray-600 text-lg">Carregando pets...</p>
+    );
 
   return (
-    <div className="p-6 bg-green-50 min-h-screen">
-      <header className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Olá, {user?.name || "Usuário"}</h1>
+    <div className="min-h-screen bg-gradient-to-tr from-green-50 to-green-100 p-8">
+      <header className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold text-green-900">
+          Olá, <span className="text-green-700">{user?.name || "Usuário"}</span>
+        </h1>
         <button
           onClick={handleLogout}
-          className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
+          className="bg-red-600 hover:bg-red-700 text-white font-semibold px-5 py-2 rounded shadow"
         >
           Logout
         </button>
       </header>
 
-      <div className="mb-4">
-        <label className="font-semibold mr-2">Filtrar por raça:</label>
+      <div className="mb-6 max-w-sm">
+        <label
+          htmlFor="breed-filter"
+          className="block font-semibold text-green-800 mb-2"
+        >
+          Filtrar por raça:
+        </label>
         <select
+          id="breed-filter"
           value={selectedBreed}
-          onChange={e => setSelectedBreed(e.target.value)}
-          className="border rounded p-2"
+          onChange={(e) => setSelectedBreed(e.target.value)}
+          className="w-full rounded border border-green-400 p-3 focus:outline-none focus:ring-2 focus:ring-green-600"
         >
           <option value="">Todas as raças</option>
-          {uniqueBreeds.map(breed => (
+          {uniqueBreeds.map((breed) => (
             <option key={breed} value={breed}>
               {breed}
             </option>
@@ -84,21 +94,21 @@ export default function Dashboard() {
         </select>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {filteredPets.map(pet => (
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        {filteredPets.map((pet) => (
           <div
             key={pet.id}
-            className="bg-white p-4 rounded shadow hover:shadow-lg transition"
+            className="bg-white rounded-xl shadow-lg p-6 transform hover:scale-105 transition"
           >
             <img
               src={images[pet.id]}
               alt={pet.breed}
-              className="w-full h-48 object-cover rounded mb-4"
+              className="w-full h-52 object-cover rounded-lg mb-4"
             />
-            <h2 className="font-bold text-lg">{pet.name || "Nome não disponível"}</h2>
-            <p>Raça: {pet.breed || "Não informado"}</p>
-            <p>Idade: {pet.age ?? "?"} anos</p>
-            <p>Tutor: {pet.owner || "Desconhecido"}</p>
+            <h2 className="font-bold text-2xl text-green-800">{pet.name}</h2>
+            <p className="text-gray-700 mt-1">Raça: {pet.breed}</p>
+            <p className="text-gray-600 mt-1">Idade: {pet.age} anos</p>
+            <p className="text-gray-600 mt-1">Tutor: {pet.owner}</p>
           </div>
         ))}
       </div>
